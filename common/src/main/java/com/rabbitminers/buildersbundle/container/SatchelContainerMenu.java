@@ -21,7 +21,8 @@ public class SatchelContainerMenu extends AbstractContainerMenu {
     }
 
     public SatchelContainerMenu(int id, Inventory playerInventory) {
-        this(id, playerInventory, new SatchelInventory(SatchelItem.getSlotCount()));
+        this(id, playerInventory, new SatchelInventory(playerInventory.getSelected(),
+                SatchelItem.getSlotCount()));
     }
 
     public SatchelContainerMenu(int id, Inventory playerInventory, SatchelInventory inventory) {
@@ -47,24 +48,6 @@ public class SatchelContainerMenu extends AbstractContainerMenu {
         for(int l = 0; l < 9; ++l) {
             this.addSlot(new Slot(playerInventory, l, 8 + l * 18, 161 + k));
         }
-
-        /*
-
-        // Add satchel inventory
-        for (int i = 0; i < 3; i++)
-            for (int j = 0; j < 9; j++)
-                this.addSlot(new SatchelSlot(inventory, j + (i + 1) * 9, 8 + j * 18, 15 + i * 18 + 3));
-
-        // Add player inventory
-        for (int si = 0; si < 3; ++si)
-            for (int sj = 0; sj < 9; ++sj)
-                this.addSlot(new Slot(playerInventory, sj + (si + 1) * 9, 8 + sj * 18, 84 + si * 18 + 1));
-
-        // Hotbar
-        for (int si = 0; si < 9; ++si)
-            this.addSlot(new Slot(playerInventory, si, 8 + si * 18, 142 + 1));
-
-         */
     }
 
     // Re-used from chest quick inserting
@@ -94,6 +77,11 @@ public class SatchelContainerMenu extends AbstractContainerMenu {
         }
 
         return itemStack;
+    }
+
+    @Override
+    public void broadcastChanges() {
+        inventory.writeItemStack();
     }
 
     @Override

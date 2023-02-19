@@ -10,6 +10,7 @@ import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.ChestMenu;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
+import org.jetbrains.annotations.NotNull;
 
 public class SatchelContainerMenu extends AbstractContainerMenu {
     public final SatchelInventory inventory;
@@ -66,9 +67,14 @@ public class SatchelContainerMenu extends AbstractContainerMenu {
          */
     }
 
-    public ItemStack quickMoveStack(Player player, int i) {
+    // Re-used from chest quick inserting
+    public @NotNull ItemStack quickMoveStack(Player player, int i) {
         ItemStack itemStack = ItemStack.EMPTY;
-        Slot slot = (Slot)this.slots.get(i);
+        if (i >= 27) // Current Choice
+            return ItemStack.EMPTY;
+
+        Slot slot = this.slots.get(i);
+
         if (slot != null && slot.hasItem()) {
             ItemStack itemStack2 = slot.getItem();
             itemStack = itemStack2.copy();

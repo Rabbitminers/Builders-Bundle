@@ -91,11 +91,7 @@ public class SatchelItem extends Item {
         throw new AssertionError();
     }
 
-    public int getSlotCount() {
+    public static int getSlotCount() {
         return slotCount;
     }
-
-
-
-
 }

@@ -1,28 +1,51 @@
 package com.rabbitminers.buildersbundle.container;
 
 import com.rabbitminers.buildersbundle.registry.AllMenus;
+import com.rabbitminers.buildersbundle.satchel.SatchelItem;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.ChestMenu;
 import net.minecraft.world.inventory.Slot;
 
 public class SatchelContainerMenu extends AbstractContainerMenu {
     public final SatchelInventory inventory;
+    public final int containerRows = 3;
 
     public SatchelContainerMenu(int id, Inventory playerInventory, FriendlyByteBuf packetBuffer) {
         this(id, playerInventory);
     }
 
     public SatchelContainerMenu(int id, Inventory playerInventory) {
-        this(id, playerInventory, new SatchelInventory(27));
+        this(id, playerInventory, new SatchelInventory(SatchelItem.getSlotCount()));
     }
 
     public SatchelContainerMenu(int id, Inventory playerInventory, SatchelInventory inventory) {
         super(AllMenus.SATCHEL_MENU.get(), id);
         this.inventory = inventory;
-        checkContainerSize(inventory, 27);
+        checkContainerSize(inventory, SatchelItem.getSlotCount());
         inventory.startOpen(playerInventory.player);
+
+        int k = (3 - 4) * 18;
+
+        for(int l = 0; l < this.containerRows; ++l) {
+            for(int m = 0; m < 9; ++m) {
+                this.addSlot(new SatchelSlot(inventory, m + l * 9, 8 + m * 18, 18 + l * 18));
+            }
+        }
+
+        for(int l = 0; l < 3; ++l) {
+            for(int m = 0; m < 9; ++m) {
+                this.addSlot(new Slot(playerInventory, m + l * 9 + 9, 8 + m * 18, 103 + l * 18 + k));
+            }
+        }
+
+        for(int l = 0; l < 9; ++l) {
+            this.addSlot(new Slot(playerInventory, l, 8 + l * 18, 161 + k));
+        }
+
+        /*
 
         // Add satchel inventory
         for (int i = 0; i < 3; i++)
@@ -37,6 +60,8 @@ public class SatchelContainerMenu extends AbstractContainerMenu {
         // Hotbar
         for (int si = 0; si < 9; ++si)
             this.addSlot(new Slot(playerInventory, si, 8 + si * 18, 142 + 1));
+
+         */
     }
 
 

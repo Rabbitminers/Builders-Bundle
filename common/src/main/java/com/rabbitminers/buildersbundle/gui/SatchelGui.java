@@ -30,7 +30,8 @@ public class SatchelGui extends AbstractContainerScreen<SatchelContainerMenu> {
     @Override
     protected void renderLabels(PoseStack poseStack, int i, int j) {
         // Disable inventory label
-        this.font.draw(poseStack, this.title, (float)this.titleLabelX, (float)this.titleLabelY+2, 4210752);
+        this.font.draw(poseStack, this.title, (float) this.titleLabelX,
+                (float) this.titleLabelY + 2, /*4210752*/ 16711423);
     }
 
     @Override

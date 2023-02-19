@@ -1,0 +1,13 @@
+{
+  "required": true,
+  "package": "com.rabbitminers.buildersbundle.fabric.mixin",
+  "compatibilityLevel": "JAVA_17",
+  "client": [
+
+  ],
+  "mixins": [
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

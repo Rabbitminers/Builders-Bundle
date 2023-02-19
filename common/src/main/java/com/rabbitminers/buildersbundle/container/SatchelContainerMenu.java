@@ -3,11 +3,13 @@ package com.rabbitminers.buildersbundle.container;
 import com.rabbitminers.buildersbundle.registry.AllMenus;
 import com.rabbitminers.buildersbundle.satchel.SatchelItem;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.world.Containers;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.ChestMenu;
 import net.minecraft.world.inventory.Slot;
+import net.minecraft.world.item.ItemStack;
 
 public class SatchelContainerMenu extends AbstractContainerMenu {
     public final SatchelInventory inventory;
@@ -27,7 +29,7 @@ public class SatchelContainerMenu extends AbstractContainerMenu {
         checkContainerSize(inventory, SatchelItem.getSlotCount());
         inventory.startOpen(playerInventory.player);
 
-        int k = (3 - 4) * 18;
+        int k = (containerRows - 4) * 18;
 
         for(int l = 0; l < this.containerRows; ++l) {
             for(int m = 0; m < 9; ++m) {
@@ -64,6 +66,29 @@ public class SatchelContainerMenu extends AbstractContainerMenu {
          */
     }
 
+    public ItemStack quickMoveStack(Player player, int i) {
+        ItemStack itemStack = ItemStack.EMPTY;
+        Slot slot = (Slot)this.slots.get(i);
+        if (slot != null && slot.hasItem()) {
+            ItemStack itemStack2 = slot.getItem();
+            itemStack = itemStack2.copy();
+            if (i < this.containerRows * 9) {
+                if (!this.moveItemStackTo(itemStack2, this.containerRows * 9, this.slots.size(), true)) {
+                    return ItemStack.EMPTY;
+                }
+            } else if (!this.moveItemStackTo(itemStack2, 0, this.containerRows * 9, false)) {
+                return ItemStack.EMPTY;
+            }
+
+            if (itemStack2.isEmpty()) {
+                slot.set(ItemStack.EMPTY);
+            } else {
+                slot.setChanged();
+            }
+        }
+
+        return itemStack;
+    }
 
     @Override
     public boolean stillValid(Player playerIn) {

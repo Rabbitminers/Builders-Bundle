@@ -53,7 +53,7 @@ public class SatchelContainerMenu extends AbstractContainerMenu {
     // Re-used from chest quick inserting
     public @NotNull ItemStack quickMoveStack(Player player, int i) {
         ItemStack itemStack = ItemStack.EMPTY;
-        if (i >= 27) // Current Choice
+        if (i == 27) // Current Choice
             return ItemStack.EMPTY;
 
         Slot slot = this.slots.get(i);

@@ -34,6 +34,11 @@ public class SatchelGui extends AbstractContainerScreen<SatchelContainerMenu> {
                 (float) this.titleLabelY + 2, /*4210752*/ 16711423);
     }
 
+    public static void renderActiveSlotOverlay() {
+        // TODO
+    }
+
+
     @Override
     protected void renderBg(@NotNull PoseStack poseStack, float f, int i, int j) {}
 

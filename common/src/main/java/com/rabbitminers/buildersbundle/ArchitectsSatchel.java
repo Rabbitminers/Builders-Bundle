@@ -1,6 +1,8 @@
 package com.rabbitminers.buildersbundle;
 
 import com.google.common.base.Suppliers;
+import com.rabbitminers.buildersbundle.events.ClientEvents;
+import com.rabbitminers.buildersbundle.events.ServerEvents;
 import com.rabbitminers.buildersbundle.registry.AllMenus;
 import com.rabbitminers.buildersbundle.satchel.SatchelItem;
 import dev.architectury.registry.CreativeTabRegistry;
@@ -36,7 +38,10 @@ public class ArchitectsSatchel {
     }
     public static void init() {
         ITEMS.register();
+
         AllMenus.init();
+        ServerEvents.init();
+        ClientEvents.init();
         
         System.out.println(ExampleExpectPlatform.getConfigDirectory().toAbsolutePath().normalize().toString());
     }

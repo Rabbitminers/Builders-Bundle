@@ -1,15 +1,25 @@
 package com.rabbitminers.buildersbundle.satchel;
 
+import com.rabbitminers.buildersbundle.ArchitectsSatchel;
 import com.rabbitminers.buildersbundle.container.SatchelContainerMenu;
 import com.rabbitminers.buildersbundle.container.SatchelInventory;
+import dev.architectury.event.EventResult;
 import dev.architectury.injectables.annotations.ExpectPlatform;
 import dev.architectury.registry.menu.MenuRegistry;
+import net.minecraft.client.HotbarManager;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.client.player.inventory.Hotbar;
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.ListTag;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.TextComponent;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.*;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.ClickAction;
@@ -23,18 +33,76 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 
 import javax.annotation.Nonnull;
+import java.util.List;
+import java.util.Random;
 
 
 public class SatchelItem extends Item {
     private static final int slotCount = 27;
     private static final String ITEM_ACCESSOR = "Items";
-    private final Block activeBlock;
+    private final ItemStack activeBlock;
     private final DyeColor colour;
 
     public SatchelItem(Properties properties) {
         super(properties);
-        this.activeBlock = Blocks.AIR;
+        this.activeBlock = ItemStack.EMPTY;
         this.colour = DyeColor.BROWN;
+    }
+
+    public static EventResult onBlockPlaced(Level world, BlockPos pos, BlockState state, Entity placer) {
+        if (world.isClientSide || !(placer instanceof Player player))
+            return EventResult.pass();
+        Inventory playerInventory = player.getInventory();
+
+        int index = getFirstInventoryIndex(playerInventory, ArchitectsSatchel.EXAMPLE_ITEM.get());
+        if (index == -1)
+            return EventResult.pass();
+
+        if (playerInventory.getSelected().getItem() != state.getBlock().asItem())
+            return EventResult.pass();
+        
+        ItemStack placedItem = playerInventory.getItem(0);
+        System.out.println(placedItem);
+
+        ItemStack bundle = playerInventory.getItem(index);
+        SatchelInventory satchelInventory = getInventory(bundle);
+
+        Item placedBlockItem = state.getBlock().asItem();
+
+        int satchelItemIndex = getFirstInventoryIndex(satchelInventory, placedBlockItem);
+        ItemStack stackInSatchel = satchelInventory.getItem(satchelItemIndex);
+
+        placedItem.grow(1);
+        playerInventory.setChanged();
+
+        stackInSatchel.shrink(1);
+        SatchelItem.saveInventory(satchelInventory, bundle);
+
+        return EventResult.pass();
+    }
+
+    public static int getFirstInventoryIndex(Player player, Item item) {
+        return getFirstInventoryIndex(player.getInventory(), item);
+    }
+
+    public static int getFirstInventoryIndex(SatchelInventory inventory, Item item) {
+        for(int i = 0; i < inventory.getContainerSize(); i++) {
+            ItemStack currentStack = inventory.getItem(i);
+            if (!currentStack.isEmpty() && currentStack.sameItem(new ItemStack(item))) {
+                return i;
+            }
+        }
+        return -1;
+    }
+
+    public static int getFirstInventoryIndex(Inventory inventory, Item item) {
+        for(int i = 0; i < inventory.getContainerSize(); i++) {
+            ItemStack currentStack = inventory.getItem(i);
+            if (!currentStack.isEmpty() && currentStack.sameItem(new ItemStack(item))) {
+                return i;
+            }
+        }
+        return -1;
     }
 
     @Override
@@ -54,19 +122,66 @@ public class SatchelItem extends Item {
         if (level.isClientSide || player == null || player.isSpectator() || player.isShiftKeyDown())
             return InteractionResult.SUCCESS;
 
-        if (activeBlock == null) {
-            player.displayClientMessage(new TextComponent("No Item!"), false);
-            return InteractionResult.FAIL;
-        }
-
         Direction face = context.getClickedFace();
-        BlockState state = activeBlock.defaultBlockState();
+        BlockPos setPosition = context.getClickedPos().relative(face);
+        ItemStack satchel = player.getItemInHand(context.getHand());
 
-        level.setBlock(context.getClickedPos(), state, 3);
+        placeRandomBlockFromInventory(satchel, (ServerLevel) level, setPosition);
 
         return InteractionResult.CONSUME;
     }
 
+    public boolean placeRandomBlockFromInventory(ItemStack satchelItem, ServerLevel level, BlockPos pos) {
+        SatchelInventory inventory = getInventory(satchelItem);
+        List<ItemStack> items = inventory.getAllItems();
+        if (items.isEmpty())
+            return false;
+        Random random = new Random();
+        int randomIndex = random.nextInt(items.size());
+        ItemStack randomItem = items.get(randomIndex);
+        if (!(randomItem.getItem() instanceof BlockItem blockItem))
+            return false;
+        BlockState state = blockItem.getBlock().defaultBlockState();
+        randomItem.shrink(1);
+        saveInventory(inventory, satchelItem);
+        return level.setBlock(pos, state, 3);
+    }
+
+
+    public static EventResult cycleActiveBlock(Minecraft client, double ammount) {
+        Player player = client.player;
+        if (player == null) return EventResult.pass();
+
+        InteractionHand usedHand;
+        usedHand = player.getOffhandItem().getItem() == ArchitectsSatchel.EXAMPLE_ITEM.get()
+                ? InteractionHand.OFF_HAND
+                : player.getMainHandItem().getItem() == ArchitectsSatchel.EXAMPLE_ITEM.get()
+                ? InteractionHand.MAIN_HAND : null;
+
+        if (usedHand == null) return EventResult.pass();
+
+        ItemStack bundleStack = player.getItemInHand(usedHand);
+        SatchelInventory bundleInventory =
+                SatchelItem.getInventory(bundleStack);
+
+        ItemStack oldSelectedItem = bundleInventory.getSelectedItem();
+
+        for(int i = bundleInventory.getSelectedSlot(); i < bundleInventory.getSelectedSlot(); i++) {
+            ItemStack currentStack = bundleInventory.getItem(i);
+            System.out.println("------");
+            System.out.println("Current " +  currentStack);
+            System.out.println("Old " + oldSelectedItem);
+            System.out.println("A " + (currentStack.getItem() == oldSelectedItem.getItem()));
+            System.out.println("B " + (currentStack != ItemStack.EMPTY));
+            if (currentStack != ItemStack.EMPTY && currentStack.getItem() != oldSelectedItem.getItem()) {
+                bundleInventory.setSelectedSlot(i);
+                System.out.println("Set Slot As " + currentStack);
+                break;
+            }
+        }
+
+        return EventResult.interruptTrue();
+    }
 
     public static void openGUI(ServerPlayer player, ItemStack stack) {
         MenuConstructor provider = getServerMenuProvider(stack);
@@ -80,10 +195,11 @@ public class SatchelItem extends Item {
         return new SatchelInventory(stack, slotCount);
     }
 
-    public void saveInventory(Container inventory, ItemStack backpackStack) {
+    public static void saveInventory(Container inventory, ItemStack stack) {
         if (inventory instanceof SatchelInventory satchelInventory)
             satchelInventory.writeItemStack();
     }
+
 
     // @ExpectPlatform
     public static MenuConstructor getServerMenuProvider(ItemStack stack) {

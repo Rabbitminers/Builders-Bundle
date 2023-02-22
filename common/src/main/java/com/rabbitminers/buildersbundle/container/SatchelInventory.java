@@ -41,6 +41,13 @@ public class SatchelInventory extends SimpleContainer {
                 .collect(Collectors.toList());
     }
 
+    public List<Integer> getAllFilledSlots() {
+        return IntStream.range(0, getContainerSize())
+                .filter(i -> !getItem(i).isEmpty())
+                .boxed()
+                .collect(Collectors.toList());
+    }
+
     public void readItemStack() {
         if (stack.getTag() != null) {
             readNBT(stack.getTag());

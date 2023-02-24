@@ -16,6 +16,5 @@ public class ArchitectsSatchelClient {
 
         AllKeymaps.init();
         ClientEvents.init();
-        ServerEvents.init();
     }
 }

@@ -38,6 +38,7 @@ public class GrowItemStackPacket {
                 ServerPlayer sender = (ServerPlayer) ctx.get().getPlayer();
                 ItemStack stack = sender.getItemInHand(packet.hand);
                 stack.grow(packet.amount);
+                // sender.getInventory().setChanged();
             });
         }
     }

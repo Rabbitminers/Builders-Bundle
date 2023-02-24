@@ -49,31 +49,28 @@ public class SatchelItem extends Item {
         this.colour = DyeColor.BROWN;
     }
 
+
     public static EventResult onBlockPlaced(Level world, BlockPos pos, BlockState state, Entity placer) {
         if (world.isClientSide || !(placer instanceof Player player))
             return EventResult.pass();
         Inventory playerInventory = player.getInventory();
 
-        int index = getFirstInventoryIndex(playerInventory, ArchitectsSatchel.EXAMPLE_ITEM.get());
+        int index = InventoryUtil.getFirstInventoryIndex(playerInventory, ArchitectsSatchel.EXAMPLE_ITEM.get());
         if (index == -1)
             return EventResult.pass();
-
-        if (playerInventory.getSelected().getItem() != state.getBlock().asItem())
-            return EventResult.pass();
-        
-        ItemStack placedItem = playerInventory.getItem(0);
-        System.out.println(placedItem);
 
         ItemStack bundle = playerInventory.getItem(index);
         SatchelInventory satchelInventory = getInventory(bundle);
 
         Item placedBlockItem = state.getBlock().asItem();
 
-        int satchelItemIndex = getFirstInventoryIndex(satchelInventory, placedBlockItem);
+        int satchelItemIndex = InventoryUtil.getFirstInventoryIndex(satchelInventory, placedBlockItem);
+        if (satchelItemIndex == -1)
+            return EventResult.pass();
         ItemStack stackInSatchel = satchelInventory.getItem(satchelItemIndex);
 
-        placedItem.grow(1);
-        playerInventory.setChanged();
+        BuildersBundleNetwork.HANDLER
+                .sendToServer(new GrowItemStackPacket(1, InteractionHand.MAIN_HAND));
 
         stackInSatchel.shrink(1);
         SatchelItem.saveInventory(satchelInventory, bundle);

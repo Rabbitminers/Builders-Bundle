@@ -4,6 +4,7 @@ import com.google.common.base.Suppliers;
 import com.rabbitminers.buildersbundle.events.ClientEvents;
 import com.rabbitminers.buildersbundle.events.ServerEvents;
 import com.rabbitminers.buildersbundle.registry.AllMenus;
+import com.rabbitminers.buildersbundle.registry.BuildersBundleNetwork;
 import com.rabbitminers.buildersbundle.satchel.SatchelItem;
 import dev.architectury.registry.CreativeTabRegistry;
 import dev.architectury.registry.registries.DeferredRegister;
@@ -42,6 +43,7 @@ public class ArchitectsSatchel {
         AllMenus.init();
         ServerEvents.init();
         ClientEvents.init();
+        BuildersBundleNetwork.init();
         
         System.out.println(ExampleExpectPlatform.getConfigDirectory().toAbsolutePath().normalize().toString());
     }

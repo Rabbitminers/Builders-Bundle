@@ -15,7 +15,6 @@ public class ClientEvents {
     }
 
     public static void clientEvents() {
-        ClientRawInputEvent.MOUSE_SCROLLED.register(SatchelItem::cycleActiveBlock);
         ClientTickEvent.CLIENT_POST.register(minecraft -> {
             while (AllKeymaps.CYCLE_BACKWARDS.consumeClick()
                     || AllKeymaps.CYCLE_FORWARDS.consumeClick()) {

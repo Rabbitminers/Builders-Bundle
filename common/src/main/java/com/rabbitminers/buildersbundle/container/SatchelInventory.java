@@ -1,9 +1,12 @@
 package com.rabbitminers.buildersbundle.container;
 
 
+import com.rabbitminers.buildersbundle.networking.SaveCompoundTagPacket;
+import com.rabbitminers.buildersbundle.registry.BuildersBundleNetwork;
 import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.ContainerHelper;
+import net.minecraft.world.InteractionHand;
 import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.item.ItemStack;
 
@@ -31,6 +34,15 @@ public class SatchelInventory extends SimpleContainer {
     }
 
     public void setSelectedSlot(int slot) {
+        this.selectedSlot = slot;
+    }
+
+    public void setSelectedSlotClient(int slot, InteractionHand hand, ItemStack bundle) {
+        CompoundTag nbt = bundle.hasTag() ? bundle.getTag() : new CompoundTag();
+        if (nbt == null) return;
+        nbt.putInt("SelectedSlot", slot);
+        BuildersBundleNetwork.HANDLER
+                .sendToServer(new SaveCompoundTagPacket(nbt, hand));
         this.selectedSlot = slot;
     }
 

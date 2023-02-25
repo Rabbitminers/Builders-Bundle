@@ -17,6 +17,7 @@ import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.TextComponent;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.stats.Stats;
 import net.minecraft.world.*;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Inventory;
@@ -28,8 +29,11 @@ import net.minecraft.world.item.*;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.DoorBlock;
+import net.minecraft.world.level.block.FlowerBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.world.level.block.state.properties.DoubleBlockHalf;
 import org.lwjgl.system.CallbackI;
 
 import java.util.List;
@@ -144,6 +148,7 @@ public class SatchelItem extends Item {
         BlockPos setPosition = context.getClickedPos().relative(face);
         ItemStack satchel = player.getItemInHand(context.getHand());
 
+
         boolean didPlace = placeRandomBlockFromInventory(satchel, (ServerLevel) level, setPosition,
                 new BlockPlaceContext(context));
         return didPlace ? InteractionResult.CONSUME : InteractionResult.FAIL;
@@ -165,7 +170,19 @@ public class SatchelItem extends Item {
             return false;
         randomItem.shrink(1);
         saveInventory(inventory, satchelItem);
-        return level.setBlock(pos, state, 3);
+
+        if (blockItem.getBlock() instanceof DoorBlock doorBlock) {
+            BlockPos topPos = pos.above();
+            BlockState topState = level.getBlockState(topPos);
+            if (!topState.getMaterial().isReplaceable())
+                return false;
+            boolean couldSetBottom = level.setBlock(pos, state, 3);
+            boolean couldSetTop = level.setBlock(topPos, doorBlock
+                    .defaultBlockState().setValue(DoorBlock.HALF, DoubleBlockHalf.UPPER), 3);
+            return couldSetTop || couldSetBottom;
+        } else {
+            return level.setBlock(pos, state, 3);
+        }
     }
 
     public static void openGUI(ServerPlayer player, ItemStack stack) {

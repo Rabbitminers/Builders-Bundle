@@ -1,9 +1,6 @@
 package com.rabbitminers.buildersbundle.networking;
 
-import com.rabbitminers.buildersbundle.registry.BuildersBundleNetwork;
 import dev.architectury.networking.NetworkManager;
-import dev.architectury.networking.simple.BaseC2SMessage;
-import dev.architectury.networking.simple.MessageType;
 import dev.architectury.utils.Env;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerPlayer;
@@ -38,7 +35,8 @@ public class GrowItemStackPacket {
                 ServerPlayer sender = (ServerPlayer) ctx.get().getPlayer();
                 ItemStack stack = sender.getItemInHand(packet.hand);
                 stack.grow(packet.amount);
-                // sender.getInventory().setChanged();
+
+                sender.containerMenu.broadcastFullState();
             });
         }
     }

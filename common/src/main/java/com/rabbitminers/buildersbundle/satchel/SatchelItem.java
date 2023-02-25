@@ -29,8 +29,7 @@ import net.minecraft.world.item.*;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.DoorBlock;
-import net.minecraft.world.level.block.FlowerBlock;
+import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.DoubleBlockHalf;
@@ -148,7 +147,6 @@ public class SatchelItem extends Item {
         BlockPos setPosition = context.getClickedPos().relative(face);
         ItemStack satchel = player.getItemInHand(context.getHand());
 
-
         boolean didPlace = placeRandomBlockFromInventory(satchel, (ServerLevel) level, setPosition,
                 new BlockPlaceContext(context));
         return didPlace ? InteractionResult.CONSUME : InteractionResult.FAIL;
@@ -179,6 +177,15 @@ public class SatchelItem extends Item {
             boolean couldSetBottom = level.setBlock(pos, state, 3);
             boolean couldSetTop = level.setBlock(topPos, doorBlock
                     .defaultBlockState().setValue(DoorBlock.HALF, DoubleBlockHalf.UPPER), 3);
+            return couldSetTop || couldSetBottom;
+        } else if (blockItem.getBlock() instanceof DoublePlantBlock tallFlower) {
+            BlockPos topPos = pos.above();
+            BlockState topState = level.getBlockState(topPos);
+            if (!topState.getMaterial().isReplaceable())
+                return false;
+            boolean couldSetBottom = level.setBlock(pos, state, 3);
+            boolean couldSetTop = level.setBlock(topPos, tallFlower
+                    .defaultBlockState().setValue(TallFlowerBlock.HALF, DoubleBlockHalf.UPPER), 3);
             return couldSetTop || couldSetBottom;
         } else {
             return level.setBlock(pos, state, 3);

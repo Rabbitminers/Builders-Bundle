@@ -25,9 +25,12 @@ import net.minecraft.world.inventory.ClickAction;
 import net.minecraft.world.inventory.MenuConstructor;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.*;
+import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import org.lwjgl.system.CallbackI;
 
 import java.util.List;
 import java.util.Random;
@@ -141,12 +144,21 @@ public class SatchelItem extends Item {
         BlockPos setPosition = context.getClickedPos().relative(face);
         ItemStack satchel = player.getItemInHand(context.getHand());
 
-        placeRandomBlockFromInventory(satchel, (ServerLevel) level, setPosition);
-
+        boolean didPlace = placeRandomBlockFromInventory(satchel, (ServerLevel) level, setPosition,
+                new BlockPlaceContext(context));
+        if (!didPlace)
+            return InteractionResult.FAIL;
+        // TODO: Add to statistics
         return InteractionResult.CONSUME;
     }
 
-    public boolean placeRandomBlockFromInventory(ItemStack satchelItem, ServerLevel level, BlockPos pos) {
+    /*
+    public boolean placeRandomBlockFromInventory(ItemStack satchelItem, ServerLevel level, BlockPos pos,
+                                             Direction direction) {
+     */
+
+    public boolean placeRandomBlockFromInventory(ItemStack satchelItem, ServerLevel level, BlockPos pos,
+                                                 BlockPlaceContext context) {
         SatchelInventory inventory = getInventory(satchelItem);
         List<ItemStack> items = inventory.getAllItems();
         if (items.isEmpty())
@@ -156,7 +168,9 @@ public class SatchelItem extends Item {
         ItemStack randomItem = items.get(randomIndex);
         if (!(randomItem.getItem() instanceof BlockItem blockItem))
             return false;
-        BlockState state = blockItem.getBlock().defaultBlockState();
+        BlockState state = blockItem.getBlock().getStateForPlacement(context);
+        if (state == null || !state.canSurvive(level, pos))
+            return false;
         randomItem.shrink(1);
         saveInventory(inventory, satchelItem);
         return level.setBlock(pos, state, 3);

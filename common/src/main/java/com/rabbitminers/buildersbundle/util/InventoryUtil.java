@@ -1,5 +1,6 @@
 package com.rabbitminers.buildersbundle.util;
 
+import com.mojang.datafixers.util.Pair;
 import com.rabbitminers.buildersbundle.ArchitectsSatchel;
 import com.rabbitminers.buildersbundle.container.SatchelInventory;
 import com.rabbitminers.buildersbundle.satchel.SatchelItem;
@@ -10,13 +11,11 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class InventoryUtil {
 
-    public static @Nullable InteractionHand getHandOfBundle(Player player, Item item) {
+    public static @Nullable InteractionHand getHandOfItem(Player player, Item item) {
         return player.getOffhandItem().getItem() == item
                 ? InteractionHand.OFF_HAND
                 : player.getMainHandItem().getItem() == item
@@ -47,7 +46,7 @@ public class InventoryUtil {
         return -1;
     }
 
-    public static ItemStack findItemInBundles(Inventory inventory, Item query) {
+    public static Pair<ItemStack, Integer> findItemInBundles(Inventory inventory, Item query) {
         List<ItemStack> bundles = inventory.items.stream()
                 .filter(item -> item.is(ArchitectsSatchel.EXAMPLE_ITEM.get()))
                 .toList();
@@ -57,9 +56,9 @@ public class InventoryUtil {
             int index = InventoryUtil
                     .getFirstInventoryIndex(bundleInventory, query);
             if (index != -1)
-                return bundleInventory.getItem(index);
+                return new Pair<>(bundle, index);
         }
 
-        return ItemStack.EMPTY;
+        return new Pair<>(ItemStack.EMPTY, -1);
     }
 }

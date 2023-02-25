@@ -16,10 +16,9 @@ public class ClientEvents {
 
     public static void clientEvents() {
         ClientTickEvent.CLIENT_POST.register(minecraft -> {
-            while (AllKeymaps.CYCLE_BACKWARDS.consumeClick()
-                    || AllKeymaps.CYCLE_FORWARDS.consumeClick()) {
+            while (AllKeymaps.CYCLE_BACKWARDS.consumeClick() || AllKeymaps.CYCLE_FORWARDS.consumeClick()) {
                 SatchelItem.cycleSelectedBlock(minecraft,
-                        AllKeymaps.CYCLE_FORWARDS.consumeClick());
+                        AllKeymaps.CYCLE_FORWARDS.isDown());
             }
         });
 

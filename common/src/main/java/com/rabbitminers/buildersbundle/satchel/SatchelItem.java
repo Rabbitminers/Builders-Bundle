@@ -168,37 +168,6 @@ public class SatchelItem extends Item {
         return level.setBlock(pos, state, 3);
     }
 
-
-    public static EventResult cycleActiveBlock(Minecraft client, double ammount) {
-        Player player = client.player;
-        if (player == null) return EventResult.pass();
-
-        InteractionHand usedHand;
-        usedHand = player.getOffhandItem().getItem() == ArchitectsSatchel.EXAMPLE_ITEM.get()
-                ? InteractionHand.OFF_HAND
-                : player.getMainHandItem().getItem() == ArchitectsSatchel.EXAMPLE_ITEM.get()
-                ? InteractionHand.MAIN_HAND : null;
-
-        if (usedHand == null) return EventResult.pass();
-
-        ItemStack bundleStack = player.getItemInHand(usedHand);
-        SatchelInventory bundleInventory =
-                SatchelItem.getInventory(bundleStack);
-
-        ItemStack oldSelectedItem = bundleInventory.getSelectedItem();
-
-        for(int i = bundleInventory.getSelectedSlot(); i < bundleInventory.getSelectedSlot(); i++) {
-            ItemStack currentStack = bundleInventory.getItem(i);
-            if (currentStack != ItemStack.EMPTY && currentStack.getItem() != oldSelectedItem.getItem()) {
-                bundleInventory.setSelectedSlot(i);
-                System.out.println("Set Slot As " + currentStack);
-                break;
-            }
-        }
-
-        return EventResult.interruptTrue();
-    }
-
     public static void openGUI(ServerPlayer player, ItemStack stack) {
         MenuConstructor provider = getServerMenuProvider(stack);
         MenuProvider namedProvider = new SimpleMenuProvider(provider, new TextComponent("Builder's Bag"));

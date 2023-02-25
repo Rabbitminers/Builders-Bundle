@@ -146,16 +146,8 @@ public class SatchelItem extends Item {
 
         boolean didPlace = placeRandomBlockFromInventory(satchel, (ServerLevel) level, setPosition,
                 new BlockPlaceContext(context));
-        if (!didPlace)
-            return InteractionResult.FAIL;
-        // TODO: Add to statistics
-        return InteractionResult.CONSUME;
+        return didPlace ? InteractionResult.CONSUME : InteractionResult.FAIL;
     }
-
-    /*
-    public boolean placeRandomBlockFromInventory(ItemStack satchelItem, ServerLevel level, BlockPos pos,
-                                             Direction direction) {
-     */
 
     public boolean placeRandomBlockFromInventory(ItemStack satchelItem, ServerLevel level, BlockPos pos,
                                                  BlockPlaceContext context) {

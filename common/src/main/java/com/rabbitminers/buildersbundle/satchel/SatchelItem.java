@@ -3,7 +3,12 @@ package com.rabbitminers.buildersbundle.satchel;
 import com.rabbitminers.buildersbundle.ArchitectsSatchel;
 import com.rabbitminers.buildersbundle.container.SatchelContainerMenu;
 import com.rabbitminers.buildersbundle.container.SatchelInventory;
+import com.rabbitminers.buildersbundle.networking.GrowItemStackPacket;
+import com.rabbitminers.buildersbundle.networking.SaveCompoundTagPacket;
+import com.rabbitminers.buildersbundle.registry.BuildersBundleNetwork;
+import com.rabbitminers.buildersbundle.util.InventoryUtil;
 import dev.architectury.event.EventResult;
+import dev.architectury.event.events.common.BlockEvent;
 import dev.architectury.injectables.annotations.ExpectPlatform;
 import dev.architectury.registry.menu.MenuRegistry;
 import net.minecraft.client.HotbarManager;
@@ -71,35 +76,43 @@ public class SatchelItem extends Item {
 
         BuildersBundleNetwork.HANDLER
                 .sendToServer(new GrowItemStackPacket(1, InteractionHand.MAIN_HAND));
+        playerInventory.setChanged();
 
         stackInSatchel.shrink(1);
         SatchelItem.saveInventory(satchelInventory, bundle);
 
         return EventResult.pass();
     }
+    public static void cycleSelectedBlock(Minecraft minecraft, boolean forwards) {
+        Player player = minecraft.player;
 
-    public static int getFirstInventoryIndex(Player player, Item item) {
-        return getFirstInventoryIndex(player.getInventory(), item);
-    }
+        if (player == null)
+            return;
 
-    public static int getFirstInventoryIndex(SatchelInventory inventory, Item item) {
-        for(int i = 0; i < inventory.getContainerSize(); i++) {
-            ItemStack currentStack = inventory.getItem(i);
-            if (!currentStack.isEmpty() && currentStack.sameItem(new ItemStack(item))) {
-                return i;
+        InteractionHand usedHand = InventoryUtil.getHandOfBundle(player,
+                ArchitectsSatchel.EXAMPLE_ITEM.get());
+        if (usedHand == null)
+            return;
+
+        ItemStack bundleItem = player.getItemInHand(usedHand);
+        SatchelInventory bundleInventory = getInventory(bundleItem);
+
+
+        int currentSlot = bundleInventory.getSelectedSlot();
+        ItemStack currentItem = bundleInventory.getItem(currentSlot);
+
+        for (int i = currentSlot + 1; i < bundleInventory.getContainerSize() + currentSlot; i++) {
+            ItemStack itemStack = bundleInventory.getItem(i % bundleInventory.getContainerSize());
+            if (itemStack.isEmpty()) {
+                continue;
+            }
+            if (itemStack.getItem() != currentItem.getItem()) {
+                currentSlot = i % bundleInventory.getContainerSize();
+                break;
             }
         }
-        return -1;
-    }
 
-    public static int getFirstInventoryIndex(Inventory inventory, Item item) {
-        for(int i = 0; i < inventory.getContainerSize(); i++) {
-            ItemStack currentStack = inventory.getItem(i);
-            if (!currentStack.isEmpty() && currentStack.sameItem(new ItemStack(item))) {
-                return i;
-            }
-        }
-        return -1;
+        bundleInventory.setSelectedSlotClient(currentSlot, usedHand, bundleItem);
     }
 
     @Override
@@ -165,11 +178,6 @@ public class SatchelItem extends Item {
 
         for(int i = bundleInventory.getSelectedSlot(); i < bundleInventory.getSelectedSlot(); i++) {
             ItemStack currentStack = bundleInventory.getItem(i);
-            System.out.println("------");
-            System.out.println("Current " +  currentStack);
-            System.out.println("Old " + oldSelectedItem);
-            System.out.println("A " + (currentStack.getItem() == oldSelectedItem.getItem()));
-            System.out.println("B " + (currentStack != ItemStack.EMPTY));
             if (currentStack != ItemStack.EMPTY && currentStack.getItem() != oldSelectedItem.getItem()) {
                 bundleInventory.setSelectedSlot(i);
                 System.out.println("Set Slot As " + currentStack);

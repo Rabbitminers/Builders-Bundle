@@ -1,24 +1,18 @@
 package com.rabbitminers.buildersbundle.satchel;
 
+import com.mojang.datafixers.util.Pair;
 import com.rabbitminers.buildersbundle.ArchitectsSatchel;
 import com.rabbitminers.buildersbundle.container.SatchelContainerMenu;
 import com.rabbitminers.buildersbundle.container.SatchelInventory;
 import com.rabbitminers.buildersbundle.networking.GrowItemStackPacket;
-import com.rabbitminers.buildersbundle.networking.SaveCompoundTagPacket;
 import com.rabbitminers.buildersbundle.registry.BuildersBundleNetwork;
 import com.rabbitminers.buildersbundle.util.InventoryUtil;
 import dev.architectury.event.EventResult;
-import dev.architectury.event.events.common.BlockEvent;
 import dev.architectury.injectables.annotations.ExpectPlatform;
 import dev.architectury.registry.menu.MenuRegistry;
-import net.minecraft.client.HotbarManager;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.screens.Screen;
-import net.minecraft.client.player.inventory.Hotbar;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.ListTag;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.TextComponent;
 import net.minecraft.server.level.ServerLevel;
@@ -33,11 +27,8 @@ import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.*;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 
-import javax.annotation.Nonnull;
 import java.util.List;
 import java.util.Random;
 
@@ -56,40 +47,43 @@ public class SatchelItem extends Item {
 
 
     public static EventResult onBlockPlaced(Level world, BlockPos pos, BlockState state, Entity placer) {
-        if (world.isClientSide || !(placer instanceof Player player))
-            return EventResult.pass();
-        Inventory playerInventory = player.getInventory();
-
-        int index = InventoryUtil.getFirstInventoryIndex(playerInventory, ArchitectsSatchel.EXAMPLE_ITEM.get());
-        if (index == -1)
+        if (world.isClientSide || !(placer instanceof Player player) || player.isCreative())
             return EventResult.pass();
 
-        ItemStack bundle = playerInventory.getItem(index);
-        SatchelInventory satchelInventory = getInventory(bundle);
+        Item placedItem = state.getBlock().asItem();
+        Pair<ItemStack, Integer> found = InventoryUtil
+                .findItemInBundles(player.getInventory(), placedItem);
+        ItemStack bundleStack = found.getFirst();
+        int index = found.getSecond();
 
-        Item placedBlockItem = state.getBlock().asItem();
-
-        int satchelItemIndex = InventoryUtil.getFirstInventoryIndex(satchelInventory, placedBlockItem);
-        if (satchelItemIndex == -1)
+        if (bundleStack.isEmpty() || index == -1)
             return EventResult.pass();
-        ItemStack stackInSatchel = satchelInventory.getItem(satchelItemIndex);
+
+        SatchelInventory inventory = getInventory(bundleStack);
+        ItemStack foundStack = inventory.getItem(index);
+
+        InteractionHand usedHand = InventoryUtil.getHandOfItem(player, placedItem);
+        if (usedHand == null)
+            return EventResult.pass();
+
+        foundStack.shrink(1);
+        saveInventory(inventory, bundleStack);
 
         BuildersBundleNetwork.HANDLER
-                .sendToServer(new GrowItemStackPacket(1, InteractionHand.MAIN_HAND));
-        playerInventory.setChanged();
-
-        stackInSatchel.shrink(1);
-        SatchelItem.saveInventory(satchelInventory, bundle);
+                .sendToServer(new GrowItemStackPacket(1, usedHand));
+        player.getInventory().setChanged();
 
         return EventResult.pass();
     }
+
+
     public static void cycleSelectedBlock(Minecraft minecraft, boolean forwards) {
         Player player = minecraft.player;
 
         if (player == null)
             return;
 
-        InteractionHand usedHand = InventoryUtil.getHandOfBundle(player,
+        InteractionHand usedHand = InventoryUtil.getHandOfItem(player,
                 ArchitectsSatchel.EXAMPLE_ITEM.get());
         if (usedHand == null)
             return;
@@ -170,7 +164,7 @@ public class SatchelItem extends Item {
 
     public static void openGUI(ServerPlayer player, ItemStack stack) {
         MenuConstructor provider = getServerMenuProvider(stack);
-        MenuProvider namedProvider = new SimpleMenuProvider(provider, new TextComponent("Builder's Bag"));
+        MenuProvider namedProvider = new SimpleMenuProvider(provider, new TextComponent("Builder's Bundle"));
         MenuRegistry.openExtendedMenu(player, namedProvider, buf -> {
             // TODO: Write items
         });

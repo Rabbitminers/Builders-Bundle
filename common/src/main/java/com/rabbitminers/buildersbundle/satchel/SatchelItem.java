@@ -97,17 +97,28 @@ public class SatchelItem extends Item {
         ItemStack bundleItem = player.getItemInHand(usedHand);
         SatchelInventory bundleInventory = getInventory(bundleItem);
 
-
         int currentSlot = bundleInventory.getSelectedSlot();
         ItemStack currentItem = bundleInventory.getItem(currentSlot);
 
-        for (int i = currentSlot + 1; i < bundleInventory.getContainerSize() + currentSlot; i++) {
-            ItemStack itemStack = bundleInventory.getItem(i % bundleInventory.getContainerSize());
+        int start, end, step;
+        if (forwards) {
+            start = currentSlot + 1;
+            end = bundleInventory.getContainerSize() + currentSlot;
+            step = 1;
+        } else {
+            start = currentSlot - 1;
+            end = currentSlot - bundleInventory.getContainerSize();
+            step = -1;
+        }
+
+        for (int i = start; i != end; i += step) {
+            int index = (i + bundleInventory.getContainerSize()) % bundleInventory.getContainerSize();
+            ItemStack itemStack = bundleInventory.getItem(index);
             if (itemStack.isEmpty()) {
                 continue;
             }
             if (itemStack.getItem() != currentItem.getItem()) {
-                currentSlot = i % bundleInventory.getContainerSize();
+                currentSlot = index;
                 break;
             }
         }

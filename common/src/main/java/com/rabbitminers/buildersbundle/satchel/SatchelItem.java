@@ -237,7 +237,7 @@ public class SatchelItem extends Item {
 
     public static PlacementMode getPlacementMode(CompoundTag nbt) {
         if (nbt == null || !nbt.contains("PlacementMode"))
-            return PlacementMode.NONE;
+            return PlacementMode.SIMPLE;
         return PlacementMode.values()[nbt.getInt("PlacementMode")];
     }
 

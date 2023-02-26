@@ -14,6 +14,8 @@ import net.fabricmc.api.Environment;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.NbtUtils;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.server.level.ServerLevel;
@@ -37,6 +39,7 @@ import net.minecraft.world.level.block.DoublePlantBlock;
 import net.minecraft.world.level.block.TallFlowerBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.DoubleBlockHalf;
+import org.checkerframework.checker.units.qual.C;
 
 import java.util.List;
 import java.util.Random;
@@ -213,14 +216,28 @@ public class SatchelItem extends Item {
             satchelInventory.writeItemStack();
     }
 
+    public static PlacementMode getPlacementMode(ItemStack stack) {
+        CompoundTag nbt = stack.hasTag() ? stack.getTag() : new CompoundTag();
+        return getPlacementMode(nbt);
+    }
+
+    public static PlacementMode getPlacementMode(CompoundTag nbt) {
+        if (nbt == null || !nbt.contains("PlacementMode"))
+            return PlacementMode.NONE;
+        return PlacementMode.values()[nbt.getInt("PlacementMode")];
+    }
+
+    public static void cyclePlacementMode(ItemStack stack) {
+        CompoundTag nbt = stack.hasTag() ? stack.getTag() : new CompoundTag();
+        PlacementMode newMode = getPlacementMode(nbt).cycleMode();
+        if (nbt == null) return;
+        nbt.putInt("PlacementMode", newMode.ordinal());
+        stack.setTag(nbt);
+    }
+
 
     public static MenuConstructor getServerMenuProvider(ItemStack stack) {
         return (id, playerInventory, serverPlayer) -> new SatchelContainerMenu(id, playerInventory);
-    }
-
-    @Environment(EnvType.CLIENT)
-    public static SatchelContainerMenu getClientMenu(int id, Inventory playerInventory, FriendlyByteBuf extra) {
-        return new SatchelContainerMenu(id, playerInventory, extra);
     }
 
 

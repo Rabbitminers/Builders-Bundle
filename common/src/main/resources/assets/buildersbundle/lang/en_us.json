@@ -3,5 +3,8 @@
 
   "item.buildersbundle.builders_bundle": "Builder's Bundle",
 
+  "buildersbundle.placement.simple": "Simple Placement",
+  "buildersbundle.placement.random": "Randomized Placement",
+
   "buildersbundle.inventory.updated": "Updated Inventory"
 }

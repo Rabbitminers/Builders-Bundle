@@ -6,6 +6,7 @@ import com.rabbitminers.buildersbundle.satchel.modes.IPlacementMode;
 import com.rabbitminers.buildersbundle.satchel.modes.RandomPlacementMode;
 import com.rabbitminers.buildersbundle.satchel.modes.SimplePlacementMode;
 import net.minecraft.network.chat.BaseComponent;
+import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.world.item.ItemStack;
 
@@ -25,7 +26,7 @@ public enum PlacementMode {
 
     public PlacementMode cycleMode() {
         PlacementMode newMode = values()[(ordinal() + 1) % values().length];
-        return newMode == NONE ? cycleMode() : newMode;
+        return newMode == NONE ? newMode.cycleMode() : newMode;
     }
 
     public ItemStack getStackForPlacement(SatchelInventory inventory) {

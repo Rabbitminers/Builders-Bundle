@@ -11,21 +11,26 @@ import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 
+import java.util.function.Supplier;
+
 import static com.rabbitminers.buildersbundle.ArchitectsSatchel.MOD_ID;
 
 public class AllItems {
     public static final DeferredRegister<Item> ITEMS =
             DeferredRegister.create(MOD_ID, Registry.ITEM_REGISTRY);
-    public static final RegistrySupplier<Item> BUILDERS_BUNDLE = ITEMS.register("builders_bundle", () ->
-            new SatchelItem(new Item.Properties()
-                    .stacksTo(1)
-                    .tab(AllItems.BUILDERS_BUNDLE_TAB)));
+
+    public static final RegistrySupplier<Item> BUILDERS_BUNDLE = register("builders_bundle", () ->
+            new SatchelItem(new Item.Properties().stacksTo(1).tab(AllItems.BUILDERS_BUNDLE_TAB)));
+
     public static final CreativeModeTab BUILDERS_BUNDLE_TAB = CreativeTabRegistry
             .create(new ResourceLocation(MOD_ID, "tab"),
                     () -> new ItemStack(BUILDERS_BUNDLE.get()));
+
+    protected static <T extends Item> RegistrySupplier<T> register(String name, Supplier<T> b) {
+        return ITEMS.register(name, b);
+    }
+
     public static void init() {
         ITEMS.register();
     }
-
-
 }

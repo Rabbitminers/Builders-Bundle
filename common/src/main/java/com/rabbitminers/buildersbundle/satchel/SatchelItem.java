@@ -10,7 +10,11 @@ import com.rabbitminers.buildersbundle.registry.BuildersBundleNetwork;
 import com.rabbitminers.buildersbundle.util.InventoryUtil;
 import dev.architectury.event.EventResult;
 import dev.architectury.injectables.annotations.ExpectPlatform;
+import dev.architectury.injectables.annotations.PlatformOnly;
 import dev.architectury.registry.menu.MenuRegistry;
+import dev.architectury.utils.Env;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -52,7 +56,7 @@ public class SatchelItem extends Item {
         this.colour = DyeColor.BROWN;
     }
 
-
+    @Environment(EnvType.CLIENT)
     public static EventResult onBlockPlaced(Level world, BlockPos pos, BlockState state, Entity placer) {
         if (world.isClientSide || !(placer instanceof Player player) || player.isCreative())
             return EventResult.pass();
@@ -84,6 +88,7 @@ public class SatchelItem extends Item {
     }
 
 
+    @Environment(EnvType.CLIENT)
     public static void cycleSelectedBlock(Minecraft minecraft, boolean forwards) {
         Player player = minecraft.player;
 
@@ -217,6 +222,7 @@ public class SatchelItem extends Item {
     }
 
     // @ExpectPlatform
+    @Environment(EnvType.CLIENT)
     public static SatchelContainerMenu getClientMenu(int id, Inventory playerInventory, FriendlyByteBuf extra) {
         return new SatchelContainerMenu(id, playerInventory, extra);
     }

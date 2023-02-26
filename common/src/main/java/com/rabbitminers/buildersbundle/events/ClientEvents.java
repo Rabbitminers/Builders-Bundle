@@ -36,7 +36,7 @@ public class ClientEvents {
                         .getHandOfItem(player, BuildersBundleItems.BUILDERS_BUNDLE.get());
                 if (usedHand == null) break;
                 ItemStack bundleStack = player.getItemInHand(usedHand);
-                SatchelItem.cyclePlacementMode(bundleStack);
+                SatchelItem.cyclePlacementModeClient(bundleStack);
             }
         });
 

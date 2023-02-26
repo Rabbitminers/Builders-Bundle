@@ -4,6 +4,7 @@ import com.mojang.datafixers.util.Pair;
 import com.rabbitminers.buildersbundle.container.SatchelContainerMenu;
 import com.rabbitminers.buildersbundle.container.SatchelInventory;
 import com.rabbitminers.buildersbundle.networking.GrowItemStackPacket;
+import com.rabbitminers.buildersbundle.networking.SaveCompoundTagPacket;
 import com.rabbitminers.buildersbundle.registry.BuildersBundleItems;
 import com.rabbitminers.buildersbundle.registry.BuildersBundleNetwork;
 import com.rabbitminers.buildersbundle.satchel.modes.IPlacementMode;
@@ -247,6 +248,20 @@ public class SatchelItem extends Item {
         if (nbt == null) return;
         nbt.putInt("PlacementMode", newMode.ordinal());
         stack.setTag(nbt);
+    }
+
+    @Environment(EnvType.CLIENT)
+    public static void cyclePlacementModeClient(ItemStack stack) {
+        CompoundTag nbt = stack.hasTag() ? stack.getTag() : new CompoundTag();
+        PlacementMode newMode = getPlacementMode(nbt).cycleMode();
+        Player player = Minecraft.getInstance().player;
+        if (nbt == null || player == null) return;
+        InteractionHand usedHand = InventoryUtil
+                .getHandOfItem(player, BuildersBundleItems.BUILDERS_BUNDLE.get());
+        if (usedHand == null) return;
+        nbt.putInt("PlacementMode", newMode.ordinal());
+        BuildersBundleNetwork.HANDLER.sendToServer(new SaveCompoundTagPacket(nbt, usedHand));
+        System.out.println("Saved Mode As" + newMode);
     }
 
 

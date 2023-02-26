@@ -199,6 +199,19 @@ public class SatchelItem extends Item {
         }
     }
 
+    @Override
+    public void appendHoverText(ItemStack itemStack, @Nullable Level level, List<Component> components, TooltipFlag tooltipFlag) {
+        PlacementMode mode = getPlacementMode(itemStack);
+
+        components.add(new TranslatableComponent("buildersbundle.tooltips.selected")
+                .append(mode.toString()).withStyle(ChatFormatting.GRAY));
+
+        components.add(new TranslatableComponent("buildersbundle.tooltips.slot")
+                .withStyle(ChatFormatting.GRAY));
+
+        super.appendHoverText(itemStack, level, components, tooltipFlag);
+    }
+
     public static void openGUI(ServerPlayer player, ItemStack stack) {
         MenuConstructor provider = getServerMenuProvider(stack);
         MenuProvider namedProvider = new SimpleMenuProvider(provider, new TranslatableComponent("item.buildersbundle.builders_bundle"));

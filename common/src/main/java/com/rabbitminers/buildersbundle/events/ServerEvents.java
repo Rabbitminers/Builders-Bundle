@@ -13,6 +13,6 @@ public class ServerEvents {
     }
 
     public static void events() {
-        BlockEvent.PLACE.register(SatchelItem::onBlockPlaced);
+        // BlockEvent.PLACE.register(SatchelItem::onBlockPlaced);
     }
 }

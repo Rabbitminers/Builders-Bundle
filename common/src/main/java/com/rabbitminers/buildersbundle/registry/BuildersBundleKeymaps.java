@@ -20,8 +20,16 @@ public class BuildersBundleKeymaps {
             "catagory." + ArchitectsSatchel.MOD_ID + ".bundle"
     );
 
+    public static final KeyMapping CHANGE_PLACEMENT_MODE = new KeyMapping(
+            "key." + ArchitectsSatchel.MOD_ID +  ".change_placement_mode", // Translation
+            InputConstants.Type.KEYSYM,
+            InputConstants.KEY_GRAVE,
+            "catagory." + ArchitectsSatchel.MOD_ID + ".bundle"
+    );
+
     public static void init() {
         KeyMappingRegistry.register(CYCLE_FORWARDS);
         KeyMappingRegistry.register(CYCLE_BACKWARDS);
+        KeyMappingRegistry.register(CHANGE_PLACEMENT_MODE);
     }
 }

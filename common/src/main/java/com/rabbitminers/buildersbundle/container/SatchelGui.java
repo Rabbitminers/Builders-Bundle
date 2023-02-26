@@ -3,17 +3,12 @@ package com.rabbitminers.buildersbundle.container;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.rabbitminers.buildersbundle.ArchitectsSatchel;
-import com.rabbitminers.buildersbundle.container.SatchelContainerMenu;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.screens.Overlay;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
-import net.minecraft.client.model.RabbitModel;
-import net.minecraft.client.player.inventory.Hotbar;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
-import net.minecraft.world.inventory.ChestMenu;
 import org.jetbrains.annotations.NotNull;
 
 public class SatchelGui extends AbstractContainerScreen<SatchelContainerMenu> {

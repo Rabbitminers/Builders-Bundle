@@ -1,7 +1,7 @@
 package com.rabbitminers.buildersbundle.forge;
 
-import dev.architectury.platform.forge.EventBuses;
 import com.rabbitminers.buildersbundle.ArchitectsSatchel;
+import dev.architectury.platform.forge.EventBuses;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 

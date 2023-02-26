@@ -1,7 +1,6 @@
 package com.rabbitminers.buildersbundle.util;
 
 import com.mojang.datafixers.util.Pair;
-import com.rabbitminers.buildersbundle.ArchitectsSatchel;
 import com.rabbitminers.buildersbundle.container.SatchelInventory;
 import com.rabbitminers.buildersbundle.registry.AllItems;
 import com.rabbitminers.buildersbundle.satchel.SatchelItem;

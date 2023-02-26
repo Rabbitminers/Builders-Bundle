@@ -2,8 +2,6 @@ package com.rabbitminers.buildersbundle.events;
 
 import com.rabbitminers.buildersbundle.registry.AllKeymaps;
 import com.rabbitminers.buildersbundle.satchel.SatchelItem;
-import dev.architectury.event.events.client.ClientRawInputEvent;
-import dev.architectury.event.events.client.ClientScreenInputEvent;
 import dev.architectury.event.events.client.ClientTickEvent;
 import dev.architectury.event.events.common.BlockEvent;
 import dev.architectury.platform.Platform;

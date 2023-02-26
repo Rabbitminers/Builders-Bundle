@@ -1,6 +1,5 @@
 package com.rabbitminers.buildersbundle.registry;
 
-import com.rabbitminers.buildersbundle.ArchitectsSatchel;
 import com.rabbitminers.buildersbundle.satchel.SatchelItem;
 import dev.architectury.registry.CreativeTabRegistry;
 import dev.architectury.registry.registries.DeferredRegister;

@@ -2,7 +2,6 @@ package com.rabbitminers.buildersbundle.registry;
 
 import com.rabbitminers.buildersbundle.ArchitectsSatchel;
 import com.rabbitminers.buildersbundle.networking.GrowItemStackPacket;
-import com.rabbitminers.buildersbundle.networking.InventoryUpdatePacket;
 import com.rabbitminers.buildersbundle.networking.SaveCompoundTagPacket;
 import dev.architectury.networking.NetworkChannel;
 import net.minecraft.resources.ResourceLocation;

@@ -1,3 +1,4 @@
 {
-  "item.examplemod.example_item": "Builder's Bundle"
+  "item.examplemod.example_item": "Builder's Bundle",
+  "buildersbundle.inventory.updated": "Updated Inventory"
 }

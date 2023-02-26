@@ -3,6 +3,7 @@ package com.rabbitminers.buildersbundle.mixin;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.rabbitminers.buildersbundle.ArchitectsSatchel;
 import com.rabbitminers.buildersbundle.container.SatchelInventory;
+import com.rabbitminers.buildersbundle.registry.AllItems;
 import com.rabbitminers.buildersbundle.satchel.SatchelItem;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
@@ -34,7 +35,7 @@ public abstract class MixinItemRenderer {
         )
     )
     public void renderGuiItem(ItemStack stack, int i, int j, BakedModel bakedModel, CallbackInfo ci) {
-        if (stack.getItem() != ArchitectsSatchel.EXAMPLE_ITEM.get())
+        if (stack.getItem() != AllItems.BUILDERS_BUNDLE.get())
             return;
 
         SatchelInventory inventory = SatchelItem.getInventory(stack);

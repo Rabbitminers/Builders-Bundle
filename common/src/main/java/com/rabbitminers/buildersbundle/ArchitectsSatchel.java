@@ -3,6 +3,7 @@ package com.rabbitminers.buildersbundle;
 import com.google.common.base.Suppliers;
 import com.rabbitminers.buildersbundle.events.ClientEvents;
 import com.rabbitminers.buildersbundle.events.ServerEvents;
+import com.rabbitminers.buildersbundle.registry.AllItems;
 import com.rabbitminers.buildersbundle.registry.AllMenus;
 import com.rabbitminers.buildersbundle.registry.BuildersBundleNetwork;
 import com.rabbitminers.buildersbundle.satchel.SatchelItem;
@@ -22,27 +23,13 @@ public class ArchitectsSatchel {
     public static final String MOD_ID = "buildersbundle";
     // We can use this if we don't want to use DeferredRegister
     public static final Supplier<Registries> REGISTRIES = Suppliers.memoize(() -> Registries.get(MOD_ID));
-    // Registering a new creative tab
-    public static final CreativeModeTab EXAMPLE_TAB = CreativeTabRegistry
-            .create(new ResourceLocation(MOD_ID, "example_tab"),
-                    () -> new ItemStack(ArchitectsSatchel.EXAMPLE_ITEM.get()));
-    
-    public static final DeferredRegister<Item> ITEMS =
-            DeferredRegister.create(MOD_ID, Registry.ITEM_REGISTRY);
-
-    public static final RegistrySupplier<Item> EXAMPLE_ITEM = ITEMS.register("builders_bundle", () ->
-            new SatchelItem(new Item.Properties()
-                    .stacksTo(1)
-                    .tab(ArchitectsSatchel.EXAMPLE_TAB)));
     public static ResourceLocation asResource(String location) {
         return new ResourceLocation(MOD_ID, location);
     }
     public static void init() {
-        ITEMS.register();
-
+        AllItems.init();
         AllMenus.init();
         ServerEvents.init();
-        ClientEvents.init();
         BuildersBundleNetwork.init();
         
         System.out.println(ExampleExpectPlatform.getConfigDirectory().toAbsolutePath().normalize().toString());

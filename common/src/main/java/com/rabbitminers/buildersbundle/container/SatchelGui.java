@@ -1,15 +1,19 @@
-package com.rabbitminers.buildersbundle.gui;
+package com.rabbitminers.buildersbundle.container;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.rabbitminers.buildersbundle.ArchitectsSatchel;
 import com.rabbitminers.buildersbundle.container.SatchelContainerMenu;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.screens.Overlay;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
+import net.minecraft.client.model.RabbitModel;
+import net.minecraft.client.player.inventory.Hotbar;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.inventory.ChestMenu;
 import org.jetbrains.annotations.NotNull;
 
 public class SatchelGui extends AbstractContainerScreen<SatchelContainerMenu> {
@@ -34,8 +38,9 @@ public class SatchelGui extends AbstractContainerScreen<SatchelContainerMenu> {
                 (float) this.titleLabelY + 2, /*4210752*/ 16711423);
     }
 
-    public static void renderActiveSlotOverlay() {
-        // TODO
+    public void renderActiveSlotOverlay(PoseStack ms, int x, int y) {
+        RenderSystem.setShader(GameRenderer::getPositionTexShader);
+        RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
     }
 
 
@@ -56,6 +61,7 @@ public class SatchelGui extends AbstractContainerScreen<SatchelContainerMenu> {
     public void render(PoseStack matrixStack, int mouseX, int mouseY, float partialTicks) {
         this.renderBackground(matrixStack);
         this.renderBack(matrixStack, partialTicks, mouseX, mouseY);
+        this.renderActiveSlotOverlay(matrixStack, 0, 0);
         super.render(matrixStack, mouseX, mouseY, partialTicks);
         this.renderTooltip(matrixStack, mouseX, mouseY);
     }

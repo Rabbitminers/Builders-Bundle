@@ -5,6 +5,7 @@ import com.rabbitminers.buildersbundle.ArchitectsSatchel;
 import com.rabbitminers.buildersbundle.container.SatchelContainerMenu;
 import com.rabbitminers.buildersbundle.container.SatchelInventory;
 import com.rabbitminers.buildersbundle.networking.GrowItemStackPacket;
+import com.rabbitminers.buildersbundle.registry.AllItems;
 import com.rabbitminers.buildersbundle.registry.BuildersBundleNetwork;
 import com.rabbitminers.buildersbundle.util.InventoryUtil;
 import dev.architectury.event.EventResult;
@@ -90,7 +91,7 @@ public class SatchelItem extends Item {
             return;
 
         InteractionHand usedHand = InventoryUtil.getHandOfItem(player,
-                ArchitectsSatchel.EXAMPLE_ITEM.get());
+                AllItems.BUILDERS_BUNDLE.get());
         if (usedHand == null)
             return;
 

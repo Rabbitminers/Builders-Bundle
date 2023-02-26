@@ -6,17 +6,21 @@ import com.rabbitminers.buildersbundle.container.SatchelInventory;
 import com.rabbitminers.buildersbundle.networking.GrowItemStackPacket;
 import com.rabbitminers.buildersbundle.registry.BuildersBundleItems;
 import com.rabbitminers.buildersbundle.registry.BuildersBundleNetwork;
+import com.rabbitminers.buildersbundle.satchel.modes.IPlacementMode;
 import com.rabbitminers.buildersbundle.util.InventoryUtil;
 import dev.architectury.event.EventResult;
 import dev.architectury.registry.menu.MenuRegistry;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
+import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtUtils;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TextComponent;
 import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -27,10 +31,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.ClickAction;
 import net.minecraft.world.inventory.MenuConstructor;
 import net.minecraft.world.inventory.Slot;
-import net.minecraft.world.item.BlockItem;
-import net.minecraft.world.item.DyeColor;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.*;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
@@ -40,6 +41,8 @@ import net.minecraft.world.level.block.TallFlowerBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.DoubleBlockHalf;
 import org.checkerframework.checker.units.qual.C;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 import java.util.Random;
@@ -143,7 +146,7 @@ public class SatchelItem extends Item {
     }
 
     @Override
-    public InteractionResult useOn(UseOnContext context) {
+    public @NotNull InteractionResult useOn(UseOnContext context) {
         Level level = context.getLevel();
         Player player = context.getPlayer();
 
@@ -154,26 +157,24 @@ public class SatchelItem extends Item {
         BlockPos setPosition = context.getClickedPos().relative(face);
         ItemStack satchel = player.getItemInHand(context.getHand());
 
-        boolean didPlace = placeRandomBlockFromInventory(satchel, (ServerLevel) level, setPosition,
+        boolean didPlace = placeBlockFromInventory(satchel, (ServerLevel) level, setPosition,
                 new BlockPlaceContext(context));
         return didPlace ? InteractionResult.CONSUME : InteractionResult.FAIL;
     }
 
-    public boolean placeRandomBlockFromInventory(ItemStack satchelItem, ServerLevel level, BlockPos pos,
+    public boolean placeBlockFromInventory(ItemStack satchelItem, ServerLevel level, BlockPos pos,
                                                  BlockPlaceContext context) {
         SatchelInventory inventory = getInventory(satchelItem);
-        List<ItemStack> items = inventory.getAllItems();
-        if (items.isEmpty())
+        if (inventory.isEmpty())
             return false;
-        Random random = new Random();
-        int randomIndex = random.nextInt(items.size());
-        ItemStack randomItem = items.get(randomIndex);
-        if (!(randomItem.getItem() instanceof BlockItem blockItem))
+        PlacementMode mode = getPlacementMode(satchelItem);
+        ItemStack itemToPlace = mode.getStackForPlacement(inventory);
+        if (!(itemToPlace.getItem() instanceof BlockItem blockItem))
             return false;
         BlockState state = blockItem.getBlock().getStateForPlacement(context);
         if (state == null || !state.canSurvive(level, pos))
             return false;
-        randomItem.shrink(1);
+        itemToPlace.shrink(1);
         saveInventory(inventory, satchelItem);
 
         if (blockItem.getBlock() instanceof DoorBlock doorBlock) {

@@ -1,4 +1,7 @@
 {
-  "item.examplemod.example_item": "Builder's Bundle",
+  "itemGroup.buildersbundle.tab": "Builder's Bundle",
+
+  "item.buildersbundle.builders_bundle": "Builder's Bundle",
+
   "buildersbundle.inventory.updated": "Updated Inventory"
 }

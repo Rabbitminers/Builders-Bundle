@@ -17,6 +17,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.TextComponent;
+import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.*;
@@ -199,7 +200,7 @@ public class SatchelItem extends Item {
 
     public static void openGUI(ServerPlayer player, ItemStack stack) {
         MenuConstructor provider = getServerMenuProvider(stack);
-        MenuProvider namedProvider = new SimpleMenuProvider(provider, new TextComponent("Builder's Bundle"));
+        MenuProvider namedProvider = new SimpleMenuProvider(provider, new TranslatableComponent("item.buildersbundle.builders_bundle"));
         MenuRegistry.openExtendedMenu(player, namedProvider, buf -> {
             // TODO: Write items
         });

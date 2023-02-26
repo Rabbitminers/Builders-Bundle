@@ -5,6 +5,7 @@
 
   "buildersbundle.placement.simple": "Simple Placement",
   "buildersbundle.placement.random": "Randomized Placement",
+  "buildersbundle.placement.none": "No Placement Mode Selected",
 
   "buildersbundle.inventory.updated": "Updated Inventory"
 }

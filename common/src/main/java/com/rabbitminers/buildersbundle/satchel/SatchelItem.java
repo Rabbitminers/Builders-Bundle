@@ -205,7 +205,7 @@ public class SatchelItem extends Item {
         PlacementMode mode = getPlacementMode(itemStack);
 
         components.add(new TranslatableComponent("buildersbundle.tooltips.selected")
-                .append(mode.toString()).withStyle(ChatFormatting.GRAY));
+                .append(mode.getName()).withStyle(ChatFormatting.GRAY));
 
         components.add(new TranslatableComponent("buildersbundle.tooltips.slot")
                 .withStyle(ChatFormatting.GRAY));

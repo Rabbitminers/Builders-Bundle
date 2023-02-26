@@ -29,6 +29,10 @@ public enum PlacementMode {
         return newMode == NONE ? newMode.cycleMode() : newMode;
     }
 
+    public BaseComponent getName() {
+        return name;
+    }
+
     public ItemStack getStackForPlacement(SatchelInventory inventory) {
         return this.mode.getBlockForPlacement(inventory);
     }

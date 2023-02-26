@@ -3,6 +3,9 @@
 
   "item.buildersbundle.builders_bundle": "Builder's Bundle",
 
+  "buildersbundle.tooltips.selected": "Placement Mode: ",
+  "buildersbundle.tooltips.slot": "Selected Slot: ",
+
   "buildersbundle.placement.simple": "Simple Placement",
   "buildersbundle.placement.random": "Randomized Placement",
   "buildersbundle.placement.none": "No Placement Mode Selected",

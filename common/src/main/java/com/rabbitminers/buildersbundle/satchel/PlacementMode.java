@@ -24,7 +24,8 @@ public enum PlacementMode {
     }
 
     public PlacementMode cycleMode(PlacementMode mode) {
-        return values()[(ordinal() + 1) % values().length];
+        PlacementMode newMode = values()[(ordinal() + 1) % values().length];
+        return newMode == NONE ? cycleMode(newMode) : newMode;
     }
 
     public ItemStack getStackForPlacement(SatchelInventory inventory) {

@@ -7,7 +7,7 @@ import net.minecraft.client.KeyMapping;
 
 public class BuildersBundleKeymaps {
     public static final KeyMapping CYCLE_BACKWARDS = new KeyMapping(
-            "key." + ArchitectsSatchel.MOD_ID +  ".cycle_back", // Translation
+            "key." + ArchitectsSatchel.MOD_ID +  ".cycle_backwards", // Translation
             InputConstants.Type.KEYSYM,
             InputConstants.KEY_LEFT,
             "catagory." + ArchitectsSatchel.MOD_ID + ".bundle"

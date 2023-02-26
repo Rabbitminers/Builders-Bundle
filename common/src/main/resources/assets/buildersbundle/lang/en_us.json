@@ -10,5 +10,10 @@
   "buildersbundle.placement.random": "Randomized Placement",
   "buildersbundle.placement.none": "No Placement Mode Selected",
 
+  "catagory.buildersbundle.bundle": "Builder's Bundle",
+  "key.buildersbundle.cycle_backwards": "Cycle Backwards",
+  "key.buildersbundle.cycle_forwards": "Cycle Forwards",
+  "key.buildersbundle.change_placement_mode": "Change Placement Mode",
+
   "buildersbundle.inventory.updated": "Updated Inventory"
 }

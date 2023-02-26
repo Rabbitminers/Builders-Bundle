@@ -14,12 +14,12 @@ import java.util.function.Supplier;
 
 import static com.rabbitminers.buildersbundle.ArchitectsSatchel.MOD_ID;
 
-public class AllItems {
+public class BuildersBundleItems {
     public static final DeferredRegister<Item> ITEMS =
             DeferredRegister.create(MOD_ID, Registry.ITEM_REGISTRY);
 
     public static final RegistrySupplier<Item> BUILDERS_BUNDLE = register("builders_bundle", () ->
-            new SatchelItem(new Item.Properties().stacksTo(1).tab(AllItems.BUILDERS_BUNDLE_TAB)));
+            new SatchelItem(new Item.Properties().stacksTo(1).tab(BuildersBundleItems.BUILDERS_BUNDLE_TAB)));
 
     public static final CreativeModeTab BUILDERS_BUNDLE_TAB = CreativeTabRegistry
             .create(new ResourceLocation(MOD_ID, "tab"),

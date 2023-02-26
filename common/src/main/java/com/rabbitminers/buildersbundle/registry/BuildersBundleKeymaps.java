@@ -5,7 +5,7 @@ import com.rabbitminers.buildersbundle.ArchitectsSatchel;
 import dev.architectury.registry.client.keymappings.KeyMappingRegistry;
 import net.minecraft.client.KeyMapping;
 
-public class AllKeymaps {
+public class BuildersBundleKeymaps {
     public static final KeyMapping CYCLE_BACKWARDS = new KeyMapping(
             "key." + ArchitectsSatchel.MOD_ID +  ".cycle_back", // Translation
             InputConstants.Type.KEYSYM,

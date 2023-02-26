@@ -2,7 +2,7 @@ package com.rabbitminers.buildersbundle.util;
 
 import com.mojang.datafixers.util.Pair;
 import com.rabbitminers.buildersbundle.container.SatchelInventory;
-import com.rabbitminers.buildersbundle.registry.AllItems;
+import com.rabbitminers.buildersbundle.registry.BuildersBundleItems;
 import com.rabbitminers.buildersbundle.satchel.SatchelItem;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.player.Inventory;
@@ -48,7 +48,7 @@ public class InventoryUtil {
 
     public static Pair<ItemStack, Integer> findItemInBundles(Inventory inventory, Item query) {
         List<ItemStack> bundles = inventory.items.stream()
-                .filter(item -> item.is(AllItems.BUILDERS_BUNDLE.get()))
+                .filter(item -> item.is(BuildersBundleItems.BUILDERS_BUNDLE.get()))
                 .toList();
 
         for (ItemStack bundle : bundles) {

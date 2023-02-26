@@ -1,6 +1,6 @@
 package com.rabbitminers.buildersbundle.container;
 
-import com.rabbitminers.buildersbundle.registry.AllMenus;
+import com.rabbitminers.buildersbundle.registry.BuildersBundleMenus;
 import com.rabbitminers.buildersbundle.satchel.SatchelItem;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.player.Inventory;
@@ -24,7 +24,7 @@ public class SatchelContainerMenu extends AbstractContainerMenu {
     }
 
     public SatchelContainerMenu(int id, Inventory playerInventory, SatchelInventory inventory) {
-        super(AllMenus.SATCHEL_MENU.get(), id);
+        super(BuildersBundleMenus.SATCHEL_MENU.get(), id);
         this.inventory = inventory;
         checkContainerSize(inventory, SatchelItem.getSlotCount());
         inventory.startOpen(playerInventory.player);

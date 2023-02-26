@@ -2,8 +2,8 @@ package com.rabbitminers.buildersbundle;
 
 import com.google.common.base.Suppliers;
 import com.rabbitminers.buildersbundle.events.ServerEvents;
-import com.rabbitminers.buildersbundle.registry.AllItems;
-import com.rabbitminers.buildersbundle.registry.AllMenus;
+import com.rabbitminers.buildersbundle.registry.BuildersBundleItems;
+import com.rabbitminers.buildersbundle.registry.BuildersBundleMenus;
 import com.rabbitminers.buildersbundle.registry.BuildersBundleNetwork;
 import dev.architectury.registry.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
@@ -18,8 +18,8 @@ public class ArchitectsSatchel {
         return new ResourceLocation(MOD_ID, location);
     }
     public static void init() {
-        AllItems.init();
-        AllMenus.init();
+        BuildersBundleItems.init();
+        BuildersBundleMenus.init();
         ServerEvents.init();
         BuildersBundleNetwork.init();
         

@@ -10,7 +10,7 @@ import net.minecraft.world.inventory.MenuType;
 
 import static com.rabbitminers.buildersbundle.ArchitectsSatchel.asResource;
 
-public class AllMenus {
+public class BuildersBundleMenus {
 
     // Registry.Menu in 1.19 -
     private static final DeferredRegister<MenuType<?>> MENUS =

@@ -1,6 +1,6 @@
 package com.rabbitminers.buildersbundle.events;
 
-import com.rabbitminers.buildersbundle.registry.AllKeymaps;
+import com.rabbitminers.buildersbundle.registry.BuildersBundleKeymaps;
 import com.rabbitminers.buildersbundle.satchel.SatchelItem;
 import dev.architectury.event.events.client.ClientTickEvent;
 import dev.architectury.event.events.common.BlockEvent;
@@ -15,9 +15,9 @@ public class ClientEvents {
 
     public static void clientEvents() {
         ClientTickEvent.CLIENT_POST.register(minecraft -> {
-            while (AllKeymaps.CYCLE_BACKWARDS.consumeClick() || AllKeymaps.CYCLE_FORWARDS.consumeClick()) {
+            while (BuildersBundleKeymaps.CYCLE_BACKWARDS.consumeClick() || BuildersBundleKeymaps.CYCLE_FORWARDS.consumeClick()) {
                 SatchelItem.cycleSelectedBlock(minecraft,
-                        AllKeymaps.CYCLE_FORWARDS.isDown());
+                        BuildersBundleKeymaps.CYCLE_FORWARDS.isDown());
             }
         });
 

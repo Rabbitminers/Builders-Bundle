@@ -4,11 +4,10 @@ import com.mojang.datafixers.util.Pair;
 import com.rabbitminers.buildersbundle.container.SatchelContainerMenu;
 import com.rabbitminers.buildersbundle.container.SatchelInventory;
 import com.rabbitminers.buildersbundle.networking.GrowItemStackPacket;
-import com.rabbitminers.buildersbundle.registry.AllItems;
+import com.rabbitminers.buildersbundle.registry.BuildersBundleItems;
 import com.rabbitminers.buildersbundle.registry.BuildersBundleNetwork;
 import com.rabbitminers.buildersbundle.util.InventoryUtil;
 import dev.architectury.event.EventResult;
-import dev.architectury.injectables.annotations.ExpectPlatform;
 import dev.architectury.registry.menu.MenuRegistry;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
@@ -16,7 +15,6 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.network.chat.TextComponent;
 import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -96,7 +94,7 @@ public class SatchelItem extends Item {
             return;
 
         InteractionHand usedHand = InventoryUtil.getHandOfItem(player,
-                AllItems.BUILDERS_BUNDLE.get());
+                BuildersBundleItems.BUILDERS_BUNDLE.get());
         if (usedHand == null)
             return;
 
@@ -216,22 +214,15 @@ public class SatchelItem extends Item {
     }
 
 
-    // @ExpectPlatform
     public static MenuConstructor getServerMenuProvider(ItemStack stack) {
         return (id, playerInventory, serverPlayer) -> new SatchelContainerMenu(id, playerInventory);
     }
 
-    // @ExpectPlatform
     @Environment(EnvType.CLIENT)
     public static SatchelContainerMenu getClientMenu(int id, Inventory playerInventory, FriendlyByteBuf extra) {
         return new SatchelContainerMenu(id, playerInventory, extra);
     }
 
-
-    @ExpectPlatform
-    public static void openScreen(ServerPlayer player, MenuProvider item, InteractionHand hand) {
-        throw new AssertionError();
-    }
 
     public static int getSlotCount() {
         return slotCount;

@@ -207,11 +207,14 @@ public class SatchelItem extends Item {
     @Override
     public void appendHoverText(ItemStack itemStack, @Nullable Level level, List<Component> components, TooltipFlag tooltipFlag) {
         PlacementMode mode = getPlacementMode(itemStack);
+        SatchelInventory satchelInventory = getInventory(itemStack);
 
         components.add(new TranslatableComponent("buildersbundle.tooltips.selected")
-                .append(mode.getName()).withStyle(ChatFormatting.GRAY));
+                .append(mode.getName())
+                .withStyle(ChatFormatting.GRAY));
 
         components.add(new TranslatableComponent("buildersbundle.tooltips.slot")
+                .append(String.valueOf(satchelInventory.getSelectedSlot()))
                 .withStyle(ChatFormatting.GRAY));
 
         super.appendHoverText(itemStack, level, components, tooltipFlag);

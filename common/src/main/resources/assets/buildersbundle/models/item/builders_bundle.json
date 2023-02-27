@@ -12,7 +12,7 @@
 			"faces": {
 				"north": {"uv": [6, 4, 8.5, 5.5], "texture": "#1"},
 				"east": {"uv": [6, 5.5, 8.5, 7], "texture": "#1"},
-				"south": {"uv": [0, 6.5, 2.5, 8], "texture": "#1"},
+				"south": {"uv": [0.5, 6.5, 3, 8], "texture": "#1"},
 				"west": {"uv": [2.5, 6.5, 5, 8], "texture": "#1"},
 				"up": {"uv": [5.5, 2.5, 3, 0], "texture": "#1"},
 				"down": {"uv": [5.5, 2.5, 3, 5], "texture": "#1"}
@@ -21,10 +21,10 @@
 		{
 			"from": [2.5, 2, 3.5],
 			"to": [8.5, 5, 8.5],
-			"rotation": {"angle": 0, "axis": "x", "origin": [3, -2, 0]},
+			"rotation": {"angle": 0, "axis": "y", "origin": [3, -2, 0]},
 			"faces": {
-				"north": {"uv": [0, 5, 3, 6.5], "texture": "#1"},
-				"east": {"uv": [5, 7, 7.5, 8.5], "texture": "#1"},
+				"north": {"uv": [0, 3, 3, 4.5], "texture": "#1"},
+				"east": {"uv": [7.5, 0, 10, 1.5], "texture": "#1"},
 				"south": {"uv": [3, 5, 6, 6.5], "texture": "#1"},
 				"west": {"uv": [7.5, 0, 10, 1.5], "texture": "#1"},
 				"up": {"uv": [3, 2.5, 0, 0], "texture": "#1"},
@@ -61,27 +61,30 @@
 	"display": {
 		"thirdperson_righthand": {
 			"rotation": [57.88, -25.49, 12.66],
-			"translation": [0.25, -1.25, 5.25],
+			"translation": [0.25, 0, 4.75],
 			"scale": [0.88, 0.88, 0.88]
 		},
 		"thirdperson_lefthand": {
 			"rotation": [0, 5, -1],
-			"translation": [-2.25, 2.5, 2.5]
+			"translation": [-2.25, 3.5, 2.5]
 		},
 		"firstperson_righthand": {
-			"rotation": [-2, 36, 0],
-			"translation": [4.5, 5, 0],
+			"rotation": [-164.14, 83.95, 163.05],
+			"translation": [2, 5, -3.25],
 			"scale": [0.9, 0.9, 0.9]
 		},
 		"firstperson_lefthand": {
-			"rotation": [-7, -56, -5],
-			"translation": [-1.75, 4.5, -1.5],
+			"rotation": [177.67, -5.86, 177.58],
+			"translation": [2.75, 5, -2.75],
 			"scale": [0.91, 0.91, 0.91]
+		},
+		"ground": {
+			"translation": [0, 5.25, 0]
 		},
 		"gui": {
 			"rotation": [6, 152, -5],
-			"translation": [-3, 7.5, 0],
-			"scale": [1.78, 1.78, 1.78]
+			"translation": [-2.25, 6.5, 0],
+			"scale": [1.49, 1.49, 1.49]
 		},
 		"head": {
 			"translation": [3.75, 19.5, 2.5],

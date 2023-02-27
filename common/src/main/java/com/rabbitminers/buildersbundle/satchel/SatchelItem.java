@@ -135,6 +135,9 @@ public class SatchelItem extends Item {
         }
 
         bundleInventory.setSelectedSlotClient(currentSlot, usedHand, bundleItem);
+
+        player.displayClientMessage(new TranslatableComponent("buildersbundle.tooltips.slot")
+                .append(String.valueOf(currentSlot)), true);
     }
 
     @Override
@@ -267,6 +270,9 @@ public class SatchelItem extends Item {
         if (usedHand == null) return;
         nbt.putInt("PlacementMode", newMode.ordinal());
         BuildersBundleNetwork.HANDLER.sendToServer(new SaveCompoundTagPacket(nbt, usedHand));
+
+        player.displayClientMessage(new TranslatableComponent("buildersbundle.tooltips.selected")
+                .append(newMode.getName()), true);
     }
 
 

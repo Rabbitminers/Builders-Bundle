@@ -3,6 +3,7 @@ package com.rabbitminers.buildersbundle.mixin;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.rabbitminers.buildersbundle.container.SatchelInventory;
 import com.rabbitminers.buildersbundle.registry.BuildersBundleItems;
+import com.rabbitminers.buildersbundle.satchel.PlacementMode;
 import com.rabbitminers.buildersbundle.satchel.SatchelItem;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
@@ -37,7 +38,8 @@ public abstract class MixinItemRenderer {
             return;
 
         SatchelInventory inventory = SatchelItem.getInventory(stack);
-        ItemStack selectedItem = inventory.getSelectedItem();
+        PlacementMode mode = SatchelItem.getPlacementMode(stack);
+        ItemStack selectedItem = mode.getStackForPlacement(inventory);
 
         if (selectedItem == ItemStack.EMPTY ||
                 !(selectedItem.getItem() instanceof BlockItem blockItem))

@@ -175,7 +175,10 @@ public class SatchelItem extends Item {
         BlockState state = blockItem.getBlock().getStateForPlacement(context);
         if (state == null || !state.canSurvive(level, pos))
             return false;
-        itemToPlace.shrink(1);
+
+        if (context.getPlayer() != null && !context.getPlayer().isCreative())
+            itemToPlace.shrink(1);
+
         saveInventory(inventory, satchelItem);
 
         if (blockItem.getBlock() instanceof DoorBlock doorBlock) {

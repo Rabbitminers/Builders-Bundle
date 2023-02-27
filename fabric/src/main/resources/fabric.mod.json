@@ -17,6 +17,9 @@
   "entrypoints": {
     "main": [
       "com.rabbitminers.buildersbundle.fabric.ArchitectsSatchelImpl"
+    ],
+    "client": [
+      "com.rabbitminers.buildersbundle.fabric.ArchitectsSatchelClientFabric"
     ]
   },
   "mixins": [

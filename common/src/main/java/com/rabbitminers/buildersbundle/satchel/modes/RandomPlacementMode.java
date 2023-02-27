@@ -9,9 +9,9 @@ import java.util.List;
 import java.util.Random;
 
 public class RandomPlacementMode implements IPlacementMode {
-    public static int getCurrentSecond() {
-        LocalDateTime now = LocalDateTime.now();
-        return now.getSecond();
+    public static int getRandomSeed() {
+        long currentTimeRaw = System.currentTimeMillis();
+        return (int) Math.round(currentTimeRaw / 500.0) * 500;
     }
 
     @Override
@@ -21,7 +21,7 @@ public class RandomPlacementMode implements IPlacementMode {
             return ItemStack.EMPTY;
         Random random = new Random();
         // Use current second to prevent the rave that occurs from calling this each second
-        random.setSeed(getCurrentSecond());
+        random.setSeed(getRandomSeed());
         int randomIndex = random.nextInt(items.size());
         return items.get(randomIndex);
     }

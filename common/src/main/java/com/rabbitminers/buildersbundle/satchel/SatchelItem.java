@@ -261,7 +261,6 @@ public class SatchelItem extends Item {
         if (usedHand == null) return;
         nbt.putInt("PlacementMode", newMode.ordinal());
         BuildersBundleNetwork.HANDLER.sendToServer(new SaveCompoundTagPacket(nbt, usedHand));
-        System.out.println("Saved Mode As" + newMode);
     }
 
 
